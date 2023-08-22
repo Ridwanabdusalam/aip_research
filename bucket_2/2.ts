@@ -52,6 +52,20 @@ class STwitterForKids {
 // Methods with HTTP bindings
 // TODO: Implement HTTP bindings
 
+async function createTweet(parent: string, tweet: string) {
+  const url = `${BASE_URL}/${parent}/tweet`;
+  const payload: CreateTweetRequest = { parent, tweet };
+  const response = await axios.post(url, payload, { headers: HEADERS });
+  return response.data;
+}
+
+async function deleteTweet(name: string) {
+  const url = `${BASE_URL}/${name}`;
+  const payload: DeleteTweetRequest = { name };
+  const response = await axios.delete(url, { data: payload, headers: HEADERS });
+  return response.data;
+}
+
 export {
   SortBy,
   LinkedTweetType,
