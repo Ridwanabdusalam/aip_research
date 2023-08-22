@@ -151,3 +151,12 @@ interface TwitterKids {
   ViewFeed(request: ViewFeedRequest): ViewFeedResponse;
   ExportTweets(request: ExportTweetsRequest): ExportTweetsResponse;
 }
+async function searchChildAccounts(requestData: MSearchChildAccountsRequest) {
+  const url = `${BASE_URL}/search_child_accounts`;
+  const params = {
+    page_size: requestData.page_size,
+    page_token: requestData.page_token,
+  };
+  const response = await axios.get(url, { params, headers: HEADERS });
+  return response.data;
+}
