@@ -20,9 +20,6 @@ const tweetServicePackage: any = loadPackageDefinition(packageDefinition).correc
 
 class TweetService implements ITweetServiceServer {
   createTweet(call: ServerUnaryCall<CreateTweetRequest>, callback: sendUnaryData<Tweet>) {
-    // Implement the logic to create a tweet
-
-    // Make an HTTP request to create a tweet
     axios.post(`${API_BASE_URL}/create_tweet`, call.request, { headers: { 'Content-Type': 'application/json' } })
       .then(response => {
         const tweet = new Tweet();
@@ -35,9 +32,6 @@ class TweetService implements ITweetServiceServer {
   }
 
   listTweets(call: ServerUnaryCall<ListTweetsRequest>, callback: sendUnaryData<ListTweetsResponse>) {
-    // Implement the logic to list tweets
-
-    // Make an HTTP request to list tweets
     axios.get(`${API_BASE_URL}/list_tweets`, { params: call.request, headers: { 'Content-Type': 'application/json' } })
       .then(response => {
         const listTweetsResponse = new ListTweetsResponse();
@@ -50,9 +44,6 @@ class TweetService implements ITweetServiceServer {
   }
 
   likeTweet(call: ServerUnaryCall<LikeTweetRequest>, callback: sendUnaryData<LikeTweetResponse>) {
-    // Implement the logic to like a tweet
-
-    // Make an HTTP request to like a tweet
     axios.post(`${API_BASE_URL}/like_tweet`, call.request, { headers: { 'Content-Type': 'application/json' } })
       .then(response => {
         const likeTweetResponse = new LikeTweetResponse();
