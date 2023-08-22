@@ -180,12 +180,6 @@ class STwitterKids:
     def ExportTweets(self, request: MExportTweetsRequest) -> MExportTweetsResponse:
         pass
 
-
-class MSearchChildAccountsResponse:
-    def __init__(self, child_accounts=None, next_page_token=None):
-        self.child_accounts = child_accounts or []
-        self.next_page_token = next_page_token
-
 def search_child_accounts(request_data):
     url = f'{BASE_URL}/search_child_accounts'
     params = {'page_size': request_data.page_size, 'page_token': request_data.page_token}
