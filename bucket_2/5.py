@@ -1,49 +1,77 @@
-from typing import List
-import grpc
-import corrected_api_pb2
-import corrected_api_pb2_grpc
+import { loadPackageDefinition, Server, ServerUnaryCall, sendUnaryData } from 'grpc';
+import * as grpcProtoLoader from '@grpc/proto-loader';
+import axios from 'axios';
 
-class UserService(corrected_api_pb2_grpc.UserServiceServicer):
-    def CreateUser(self, request, context):
-        # Implement the logic to create a user
-        return corrected_api_pb2.User()
+import { TweetServiceService, ITweetServiceServer } from './path-to-corrected-api_pb_grpc';
+import { CreateTweetRequest, ListTweetsRequest, LikeTweetRequest, Tweet, ListTweetsResponse, LikeTweetResponse } from './path-to-corrected-api_pb';
 
-    def UpdateUser(self, request, context):
-        # Implement the logic to update a user
-        return corrected_api_pb2.Book()
+const PROTO_PATH = 'path-to-corrected-api.proto'; // Replace with the actual path
+const API_BASE_URL = 'your_api_base_url_here'; // Replace with the actual API base URL
 
-    def SendVerificationEmail(self, request, context):
-        # Implement the logic to send a verification email
-        return corrected_api_pb2.Empty()
+const packageDefinition = grpcProtoLoader.loadSync(PROTO_PATH, {
+  keepCase: true,
+  longs: String,
+  enums: String,
+  defaults: true,
+  oneofs: true,
+});
 
-    def VerifyEmail(self, request, context):
-        # Implement the logic to verify an email
-        return corrected_api_pb2.VerifyEmailResponse()
+const tweetServicePackage: any = loadPackageDefinition(packageDefinition).corrected_api; // Replace 'corrected_api' with the actual package name
 
-    def FollowUser(self, request, context):
-        # Implement the logic to follow a user
-        return corrected_api_pb2.FollowUserResponse()
+class TweetService implements ITweetServiceServer {
+  createTweet(call: ServerUnaryCall<CreateTweetRequest>, callback: sendUnaryData<Tweet>) {
+    // Implement the logic to create a tweet
 
-class TweetService(corrected_api_pb2_grpc.TweetServiceServicer):
-    def CreateTweet(self, request, context):
-        # Implement the logic to create a tweet
-        return corrected_api_pb2.Tweet()
+    // Make an HTTP request to create a tweet
+    axios.post(`${API_BASE_URL}/create_tweet`, call.request, { headers: { 'Content-Type': 'application/json' } })
+      .then(response => {
+        const tweet = new Tweet();
+        callback(null, tweet);
+      })
+      .catch(error => {
+        console.error('Error creating tweet:', error);
+        callback(error, null);
+      });
+  }
 
-    def ListTweets(self, request, context):
-        # Implement the logic to list tweets
-        return corrected_api_pb2.ListTweetsResponse()
+  listTweets(call: ServerUnaryCall<ListTweetsRequest>, callback: sendUnaryData<ListTweetsResponse>) {
+    // Implement the logic to list tweets
 
-    def LikeTweet(self, request, context):
-        # Implement the logic to like a tweet
-        return corrected_api_pb2.LikeTweetResponse()
+    // Make an HTTP request to list tweets
+    axios.get(`${API_BASE_URL}/list_tweets`, { params: call.request, headers: { 'Content-Type': 'application/json' } })
+      .then(response => {
+        const listTweetsResponse = new ListTweetsResponse();
+        callback(null, listTweetsResponse);
+      })
+      .catch(error => {
+        console.error('Error listing tweets:', error);
+        callback(error, null);
+      });
+  }
 
-def serve():
-    server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
-    corrected_api_pb2_grpc.add_UserServiceServicer_to_server(UserService(), server)
-    corrected_api_pb2_grpc.add_TweetServiceServicer_to_server(TweetService(), server)
-    server.add_insecure_port('[::]:50051')
-    server.start()
-    server.wait_for_termination()
+  likeTweet(call: ServerUnaryCall<LikeTweetRequest>, callback: sendUnaryData<LikeTweetResponse>) {
+    // Implement the logic to like a tweet
 
-if __name__ == '__main__':
-    serve()
+    // Make an HTTP request to like a tweet
+    axios.post(`${API_BASE_URL}/like_tweet`, call.request, { headers: { 'Content-Type': 'application/json' } })
+      .then(response => {
+        const likeTweetResponse = new LikeTweetResponse();
+        callback(null, likeTweetResponse);
+      })
+      .catch(error => {
+        console.error('Error liking tweet:', error);
+        callback(error, null);
+      });
+  }
+}
+
+const server = new Server();
+server.addService(TweetServiceService, new TweetService());
+server.bindAsync('127.0.0.1:50051', credentials.createInsecure(), (err, port) => {
+  if (err) {
+    console.error('Error starting server:', err);
+  } else {
+    console.log(`Server started on port ${port}`);
+    server.start();
+  }
+});
