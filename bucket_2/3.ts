@@ -130,8 +130,19 @@ class STwitterForKidsService {
     // ... (implement other methods)
 }
 
-// Methods with HTTP bindings
-// TODO: Implement HTTP bindings
+
+// API method implementations
+async function createParentAccount(): Promise<any> {
+  const url = `${BASE_URL}/v1/parents`;
+  const response = await axios.post(url, parentAccount, { headers: HEADERS });
+  return response.data;
+}
+
+async function verifyParentAccount(): Promise<any> {
+  const url = `${BASE_URL}/v1/parents/parent_id_here/verify`; // Replace with actual parent ID
+  const response = await axios.patch(url, {}, { headers: HEADERS });
+  return response.data;
+}
 
 // Main program
 // TODO: Implement server logic
