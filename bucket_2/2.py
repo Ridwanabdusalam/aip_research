@@ -175,5 +175,12 @@ class STwitterForKids:
     def ExportTweets(request: MExportTweetsRequest) -> google.longrunning.Operation:
         # TODO: Implement logic
 
-# Methods with HTTP bindings
-# TODO: Implement HTTP bindings
+def get_parent_account():
+    url = f'{BASE_URL}/GetParentAccount'
+    response = requests.get(url, headers=HEADERS)
+    return response.json()
+
+def create_parent_account(request_data):
+    url = f'{BASE_URL}/CreateParentAccount'
+    response = requests.post(url, json=request_data, headers=HEADERS)
+    return response.json()
