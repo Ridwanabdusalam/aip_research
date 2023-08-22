@@ -75,6 +75,19 @@ const axiosInstance = axios.create({
   headers: HEADERS,
 });
 
+//sample funcs...
+function createTweet(tweet: string) {
+  const url = `${BASE_URL}/tweets`;
+  const payload: CreateTweetRequest = { tweet };
+  return axios.post(url, payload, { headers });
+}
+
+function deleteTweet(name: string) {
+  const url = `${BASE_URL}/${name}`;
+  const payload: DeleteTweetRequest = { name };
+  return axios.delete(url, { data: payload, headers });
+}
+
 // API requests functions
 async function createAccount(account: Account) {
   const url = `/accounts`;
