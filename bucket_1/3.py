@@ -176,6 +176,19 @@ HEADERS = {
     "Authorization": "Bearer YOUR_ACCESS_TOKEN",
 }
 
+def create_parent_request(request_data):
+    url = f'{BASE_URL}/create_parent'
+    payload = {'parent': request_data.parent}
+    response = requests.post(url, json=payload, headers=HEADERS)
+    return response
+
+def create_tweet_request(request_data):
+    url = f'{BASE_URL}/create_tweet'
+    payload = {'tweet': request_data.tweet}
+    response = requests.post(url, json=payload, headers=HEADERS)
+    return response
+
+
 # Initialize TwitterAPI with base URL and headers
 twitter_api = TwitterAPI(BASE_URL, HEADERS)
 
