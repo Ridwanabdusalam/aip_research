@@ -1,66 +1,77 @@
-import { Server, ServerCredentials } from 'grpc';
-import { UserServiceService, ITweetServiceServer, IUserServiceServer } from './corrected_api_pb';
-import { CreateUserRequest, User, Empty, FollowUserRequest, FollowUserResponse, LikeTweetRequest, LikeTweetResponse, ListTweetsRequest, ListTweetsResponse, SendVerificationEmailRequest, VerifyEmailRequest, VerifyEmailResponse, Tweet, UpdateUserRequest } from './corrected_api_pb';
-import * as grpcWeb from 'grpc-web';
+import { loadPackageDefinition, Server, ServerUnaryCall, sendUnaryData, credentials } from 'grpc';
+import * as grpcProtoLoader from '@grpc/proto-loader';
+import axios from 'axios';
 
-class UserService implements IUserServiceServer {
-  createUser(request: CreateUserRequest): Promise<User> {
-    // Implement the logic to create a user
-    const response = new User();
-    return Promise.resolve(response);
-  }
+import { TweetServiceService, ITweetServiceServer } from './path-to-corrected-api_pb_grpc';
+import { CreateTweetRequest, ListTweetsRequest, LikeTweetRequest, Tweet, ListTweetsResponse, LikeTweetResponse } from './path-to-corrected-api_pb';
 
-  updateUser(request: UpdateUserRequest): Promise<User> {
-    // Implement the logic to update a user
-    const response = new User();
-    return Promise.resolve(response);
-  }
+const PROTO_PATH = 'path-to-corrected-api.proto'; // Replace with the actual path
+const API_BASE_URL = 'your_api_base_url_here'; // Replace with the actual API base URL
 
-  sendVerificationEmail(request: SendVerificationEmailRequest): Promise<Empty> {
-    // Implement the logic to send a verification email
-    const response = new Empty();
-    return Promise.resolve(response);
-  }
+const packageDefinition = grpcProtoLoader.loadSync(PROTO_PATH, {
+  keepCase: true,
+  longs: String,
+  enums: String,
+  defaults: true,
+  oneofs: true,
+});
 
-  verifyEmail(request: VerifyEmailRequest): Promise<VerifyEmailResponse> {
-    // Implement the logic to verify an email
-    const response = new VerifyEmailResponse();
-    return Promise.resolve(response);
-  }
-
-  followUser(request: FollowUserRequest): Promise<FollowUserResponse> {
-    // Implement the logic to follow a user
-    const response = new FollowUserResponse();
-    return Promise.resolve(response);
-  }
-}
+const tweetServicePackage: any = loadPackageDefinition(packageDefinition).corrected_api; // Replace 'corrected_api' with the actual package name
 
 class TweetService implements ITweetServiceServer {
-  createTweet(request: Tweet): Promise<Tweet> {
+  createTweet(call: ServerUnaryCall<CreateTweetRequest>, callback: sendUnaryData<Tweet>) {
     // Implement the logic to create a tweet
-    const response = new Tweet();
-    return Promise.resolve(response);
+
+    // Make an HTTP request to create a tweet
+    axios.post(`${API_BASE_URL}/create_tweet`, call.request, { headers: { 'Content-Type': 'application/json' } })
+      .then(response => {
+        const tweet = new Tweet();
+        callback(null, tweet);
+      })
+      .catch(error => {
+        console.error('Error creating tweet:', error);
+        callback(error, null);
+      });
   }
 
-  listTweets(request: ListTweetsRequest): Promise<ListTweetsResponse> {
+  listTweets(call: ServerUnaryCall<ListTweetsRequest>, callback: sendUnaryData<ListTweetsResponse>) {
     // Implement the logic to list tweets
-    const response = new ListTweetsResponse();
-    return Promise.resolve(response);
+
+    // Make an HTTP request to list tweets
+    axios.get(`${API_BASE_URL}/list_tweets`, { params: call.request, headers: { 'Content-Type': 'application/json' } })
+      .then(response => {
+        const listTweetsResponse = new ListTweetsResponse();
+        callback(null, listTweetsResponse);
+      })
+      .catch(error => {
+        console.error('Error listing tweets:', error);
+        callback(error, null);
+      });
   }
 
-  likeTweet(request: LikeTweetRequest): Promise<LikeTweetResponse> {
+  likeTweet(call: ServerUnaryCall<LikeTweetRequest>, callback: sendUnaryData<LikeTweetResponse>) {
     // Implement the logic to like a tweet
-    const response = new LikeTweetResponse();
-    return Promise.resolve(response);
+
+    // Make an HTTP request to like a tweet
+    axios.post(`${API_BASE_URL}/like_tweet`, call.request, { headers: { 'Content-Type': 'application/json' } })
+      .then(response => {
+        const likeTweetResponse = new LikeTweetResponse();
+        callback(null, likeTweetResponse);
+      })
+      .catch(error => {
+        console.error('Error liking tweet:', error);
+        callback(error, null);
+      });
   }
 }
 
-const server = new grpcWeb.Server();
-
-server.addService(UserServiceService, new UserService());
+const server = new Server();
 server.addService(TweetServiceService, new TweetService());
-
-server.bind('0.0.0.0:50051', ServerCredentials.createInsecure());
-server.start();
-
-console.log('Server running on port 50051');
+server.bindAsync('127.0.0.1:50051', credentials.createInsecure(), (err, port) => {
+  if (err) {
+    console.error('Error starting server:', err);
+  } else {
+    console.log(`Server started on port ${port}`);
+    server.start();
+  }
+});
