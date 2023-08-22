@@ -49,8 +49,25 @@ class STwitterForKids {
   }
 }
 
-// Methods with HTTP bindings
-// TODO: Implement HTTP bindings
+// API method implementations
+async function getParentAccount(): Promise<ParentAccount> {
+  const url = `${BASE_URL}/GetParentAccount`;
+  const response = await axios.get(url, { headers: HEADERS });
+  return response.data;
+}
+
+async function createParentAccount(requestData: CreateParentAccountRequest): Promise<ParentAccount> {
+  const url = `${BASE_URL}/CreateParentAccount`;
+  const response = await axios.post(url, requestData, { headers: HEADERS });
+  return response.data;
+}
+
+async function sendParentAccountVerificationChallenge(
+  requestData: ParentAccountVerificationChallengeRequest
+): Promise<void> {
+  const url = `${BASE_URL}/SendParentAccountVerificationChallenge`;
+  await axios.post(url, requestData, { headers: HEADERS });
+}
 
 export {
   SortBy,
