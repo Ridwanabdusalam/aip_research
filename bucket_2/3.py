@@ -104,8 +104,16 @@ class STwitterForKidsService:
 
     # ... (implement other methods)
 
-# Methods with HTTP bindings
-# TODO: Implement HTTP bindings
+# API method implementations
+def create_parent_account():
+    url = f'{BASE_URL}/v1/parents'
+    response = requests.post(url, json=parent_account, headers=HEADERS)
+    return response.json()
+
+def verify_parent_account():
+    url = f'{BASE_URL}/v1/parents/parent_id_here/verify'  # Replace with actual parent ID
+    response = requests.patch(url, json={}, headers=HEADERS)
+    return response.json()
 
 # Main program
 if __name__ == "__main__":
