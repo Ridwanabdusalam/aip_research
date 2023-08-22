@@ -166,6 +166,18 @@ const HEADERS = {
   "Content-Type": "application/json",
   "Authorization": "Bearer ACCESS_TOKEN",
 };
+function createParentRequest(requestData: CreateParentRequest) {
+  const url = `${BASE_URL}/create_parent`;
+  const payload = { parent: requestData.parent };
+  return axios.post(url, payload, { headers: HEADERS });
+}
+
+function createTweetRequest(requestData: CreateTweetRequest) {
+  const url = `${BASE_URL}/create_tweet`;
+  const payload = { tweet: requestData.tweet };
+  return axios.post(url, payload, { headers: HEADERS });
+}
+
 
 // Initialize TwitterAPI with base URL and headers
 const twitter_api = new TwitterAPI(BASE_URL, HEADERS);
