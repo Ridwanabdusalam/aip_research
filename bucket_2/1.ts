@@ -133,4 +133,84 @@ enum AccountType {
     CreateComment(request: MCreateCommentRequest): MComment;
     ExportTweets(request: MExportTweetsRequest): MExportTweetsResponse;
   }
-  
+
+
+
+
+// Client side
+import * as grpc from 'grpc';
+import { MCreateTweetRequest, MDeleteTweetRequest, MLikeTweetRequest, MCreateCommentRequest, MTweet } from './child_twitter_pb';
+import { STwitterForKidsServiceClient } from './child_twitter_grpc_pb';
+
+// Create a gRPC client to connect to the server
+const client = new STwitterForKidsServiceClient('localhost:50051', grpc.credentials.createInsecure());
+
+// Create a tweet
+function createTweet(parent: string, tweetText: string) {
+    const request = new MCreateTweetRequest();
+    request.setParent(parent);
+    const tweet = new MTweet();
+    tweet.setText(tweetText);
+    request.setTweet(tweet);
+
+    client.createTweet(request, (error, response) => {
+        if (!error) {
+            console.log(`Tweet created: ${response.getTweet()?.getName()}`);
+        } else {
+            console.error('Error creating tweet:', error.message);
+        }
+    });
+}
+
+// Delete a tweet
+function deleteTweet(tweetName: string) {
+    const request = new MDeleteTweetRequest();
+    request.setName(tweetName);
+
+    client.deleteTweet(request, (error) => {
+        if (!error) {
+            console.log(`Tweet deleted: ${tweetName}`);
+        } else {
+            console.error('Error deleting tweet:', error.message);
+        }
+    });
+}
+
+// Like a tweet
+function likeTweet(tweetName: string) {
+    const request = new MLikeTweetRequest();
+    request.setName(tweetName);
+
+    client.likeTweet(request, (error) => {
+        if (!error) {
+            console.log(`Tweet liked: ${tweetName}`);
+        } else {
+            console.error('Error liking tweet:', error.message);
+        }
+    });
+}
+
+// Reply to a tweet
+function replyToTweet(parentTweetName: string, replyText: string) {
+    const request = new MCreateCommentRequest();
+    request.setParent(parentTweetName);
+    const comment = new MTweet();
+    comment.setText(replyText);
+    request.setComment(comment);
+
+    client.createComment(request, (error, response) => {
+        if (!error) {
+            console.log(`Reply created: ${response.getName()}`);
+        } else {
+            console.error('Error creating reply:', error.message);
+        }
+    });
+}
+
+// Usage
+if (require.main === module) {
+    createTweet('parent_account', 'Hello, Twitter for Kids!');
+    deleteTweet('tweet123');
+    likeTweet('tweet456');
+    replyToTweet('tweet789', "That's great!");
+}
