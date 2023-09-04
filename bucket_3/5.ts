@@ -137,3 +137,20 @@ function startServer(): void {
 }
 
 startServer();
+
+
+// client:
+
+// Get a child by username
+function getChildByUsername(username: string) {
+  const request = new GetChildByUsernameRequest();
+  request.setUsername(username);
+
+  client.getChildByUsername(request, (error: grpc.ServiceError | null, response: Child) => {
+    if (!error) {
+      console.log('Child details:', response.toObject());
+    } else {
+      console.error('Error getting child by username:', error.details);
+    }
+  });
+}
