@@ -130,3 +130,26 @@ server.addService(SAccountServiceService, new AccountService());
 server.addService(SFeedServiceService, new FeedService());
 server.bind('0.0.0.0:50051', grpc.ServerCredentials.createInsecure());
 server.start();
+
+
+
+
+// client side:
+
+function likeTweet(tweetId: string) {
+  const request = new LikeTweetRequest();
+  request.setTweetId(tweetId);
+
+  client.likeTweet(request, (error: grpc.ServiceError | null, response: LikeTweetResponse) => {
+    if (!error) {
+      const likedTweet: Tweet | undefined = response.getTweet();
+      if (likedTweet) {
+        console.log('Tweet liked:', likedTweet.toObject());
+      } else {
+        console.log('Tweet liked.');
+      }
+    } else {
+      console.error('Error liking tweet:', error.details);
+    }
+  });
+}
