@@ -83,3 +83,58 @@ server.bindAsync(serverPort, grpc.ServerCredentials.createInsecure(), () => {
     console.log(`Server started on ${serverPort}`);
     server.start();
 });
+
+
+
+
+
+// client side:
+
+ CreateTweet(request: CreateTweetRequest, context: any): CreateTweetResponse {
+    const newTweet = new Tweet();
+    newTweet.setText(request.getText());
+    newTweet.setLikes(0);
+    newTweet.setOriginalTweet('');
+    newTweet.setName('tweet123'); //tweet id here
+
+    const response = new CreateTweetResponse();
+    response.setTweet(newTweet);
+    return response;
+  }
+
+  DeleteTweet(request: DeleteTweetRequest, context: any): DeleteTweetResponse {
+    const tweetId = request.getTweetId();
+
+    const response = new DeleteTweetResponse();
+    return response;
+  }
+
+  LikeTweet(request: LikeTweetRequest, context: any): LikeTweetResponse {
+    const tweetId = request.getTweetId();
+
+    const response = new LikeTweetResponse();
+    return response;
+  }
+
+  ReplyTweet(request: ReplyTweetRequest, context: any): ReplyTweetResponse {
+    const parentTweetId = request.getParentTweetId();
+    const replyText = request.getReplyText();
+
+    const newReply = new Tweet();
+    newReply.setText(replyText);
+    newReply.setLikes(0);
+    newReply.setOriginalTweet(parentTweetId);
+    newReply.setName('reply123'); //reply message id
+
+    const response = new ReplyTweetResponse();
+    response.setReply(newReply);
+    return response;
+  }
+
+  RetweetTweet(request: any, context: any): RetweetTweetResponse {
+    const tweetId = request.getTweetId();
+    //tweet logic here
+
+    const response = new RetweetTweetResponse();
+    return response;
+  }
