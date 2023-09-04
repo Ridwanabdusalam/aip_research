@@ -68,3 +68,16 @@ def serve():
 
 if __name__ == '__main__':
     serve()
+
+
+
+# client side:
+
+# Like a tweet
+def like_tweet(tweet_id):
+    request = LikeTweetRequest(tweet_id=tweet_id)
+    try:
+        response = client.LikeTweet(request)
+        print('Tweet liked:', response.tweet)
+    except grpc.RpcError as e:
+        print('Error liking tweet:', e.details())
