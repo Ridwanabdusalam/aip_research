@@ -102,3 +102,18 @@ def serve():
 
 if __name__ == '__main__':
     serve()
+
+
+
+
+# client side:
+
+
+# Get a child by username
+def get_child_by_username(username):
+    request = GetChildByUsernameRequest(username=username)
+    try:
+        response = client.GetChildByUsername(request)
+        print('Child details:', response)
+    except grpc.RpcError as e:
+        print('Error getting child by username:', e.details())
