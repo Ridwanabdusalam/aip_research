@@ -138,3 +138,42 @@ server.bindAsync(serverPort, grpc.ServerCredentials.createInsecure(), () => {
     const response = new RetweetTweetResponse();
     return response;
   }
+
+
+
+
+//Client-side implementation
+
+// Verify parent email
+function verifyParentEmail(email: string) {
+  const request = new VerifyParentEmailRequest();
+  request.setEmail(email);
+
+  client.verifyParentEmail(request, (error, response: VerifyParentEmailResponse) => {
+    if (!error) {
+      console.log('Parent email verification result:', response.getResult());
+    } else {
+      console.error('Error verifying parent email:', error.message);
+    }
+  });
+}
+
+// Verify child email
+function verifyChildEmail(email: string) {
+  const request = new VerifyChildEmailRequest();
+  request.setEmail(email);
+
+  client.verifyChildEmail(request, (error, response: VerifyChildEmailResponse) => {
+    if (!error) {
+      console.log('Child email verification result:', response.getResult());
+    } else {
+      console.error('Error verifying child email:', error.message);
+    }
+  });
+}
+
+// usage
+if (require.main === module) {
+  verifyParentEmail('parent@example.com');
+  verifyChildEmail('child@example.com');
+}
