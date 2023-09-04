@@ -117,3 +117,48 @@ const server = new grpc.Server();
 server.addService(KidTwitterService, new KidTwitterServicer());
 server.bind('0.0.0.0:50051', grpc.ServerCredentials.createInsecure());
 server.start();
+
+
+
+
+
+// client side:
+
+
+// Create a parent account
+function createParentAccount(name: string, email: string, password: string) {
+  const request = new CreateParentAccountRequest();
+  request.setName(name);
+  request.setEmail(email);
+  request.setPassword(password);
+
+  client.createParentAccount(request, (error, response: ParentAccount) => {
+    if (!error) {
+      console.log('Parent account created:', response);
+    } else {
+      console.error('Error creating parent account:', error.message);
+    }
+  });
+}
+
+// Update a parent account
+function updateParentAccount(accountId: string, updatedData: any) {
+  const request = new UpdateParentAccountRequest();
+  request.setAccountId(accountId);
+  request.setUpdatedData(updatedData);
+
+  client.updateParentAccount(request, (error, response: ParentAccount) => {
+    if (!error) {
+      console.log('Parent account updated:', response);
+    } else {
+      console.error('Error updating parent account:', error.message);
+    }
+  });
+}
+
+// execute
+if (require.main === module) {
+  createParentAccount('Ridwan Abdusalam', 'ridwanexample.com', 'pass123@');
+  const updateData = { name: 'New Name', email: 'newemail@example.com' };
+  updateParentAccount('123456', updateData);
+}
