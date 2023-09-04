@@ -118,7 +118,7 @@ if __name__ == '__main__':
             text=request.text,
             likes=0,
             original_tweet="",
-            name="tweet123",  # Replace with a unique tweet ID
+            name="tweet123",  # tweet id
         )
         response = CreateTweetResponse(tweet=new_tweet)
         return response
