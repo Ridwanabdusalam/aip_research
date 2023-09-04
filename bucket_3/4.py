@@ -77,3 +77,28 @@ def serve():
 
 if __name__ == '__main__':
     serve()
+
+
+
+
+# client side:
+
+#after all imports requred...
+
+# Create a parent account
+def create_parent_account(name, email, password):
+    request = CreateParentAccountRequest(name=name, email=email, password=password)
+    try:
+        response = client.CreateParentAccount(request)
+        print('Parent account created:', response)
+    except grpc.RpcError as e:
+        print('Error creating parent account:', e.details())
+
+# Update a parent account
+def update_parent_account(account_id, updated_data):
+    request = UpdateParentAccountRequest(account_id=account_id, updated_data=updated_data)
+    try:
+        response = client.UpdateParentAccount(request)
+        print('Parent account updated:', response)
+    except grpc.RpcError as e:
+        print('Error updating parent account:', e.details())
