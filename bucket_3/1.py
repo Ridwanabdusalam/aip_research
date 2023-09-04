@@ -114,7 +114,6 @@ if __name__ == '__main__':
 #Client's implementation
 
     def CreateTweet(self, request: CreateTweetRequest, context):
-        # Sample implementation: Create a new tweet
         new_tweet = api_pb2.Tweet(
             text=request.text,
             likes=0,
@@ -125,36 +124,28 @@ if __name__ == '__main__':
         return response
 
     def DeleteTweet(self, request: DeleteTweetRequest, context):
-        #Delete a tweet by its ID
         tweet_id = request.tweet_id
-        #  delete logic
         response = DeleteTweetResponse()
         return response
 
     def LikeTweet(self, request: LikeTweetRequest, context):
-        # Increment the like count for a tweet
         tweet_id = request.tweet_id
-        # like logic
         response = LikeTweetResponse()
         return response
 
     def ReplyTweet(self, request: ReplyTweetRequest, context):
-        # Sample implementation: Create a reply to a tweet
         parent_tweet_id = request.parent_tweet_id
         reply_text = request.reply_text
-        # Your reply logic here...
         new_reply = api_pb2.Tweet(
             text=reply_text,
             likes=0,
             original_tweet=parent_tweet_id,
-            name="reply123",  # Replace with a unique reply ID
+            name="reply123", #reply id
         )
         response = ReplyTweetResponse(reply=new_reply)
         return response
 
     def RetweetTweet(self, request, context):
-        # Retweet a tweet
         tweet_id = request.tweet_id
-        # Your retweet logic here...
         response = api_pb2.RetweetTweetResponse()
         return response
