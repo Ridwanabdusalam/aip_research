@@ -116,3 +116,26 @@ def serve():
 
 if __name__ == '__main__':
     serve()
+
+
+
+
+#client side:
+
+# Verify parent email
+def verify_parent_email(email):
+    request = VerifyParentEmailRequest(email=email)
+    try:
+        response = client.VerifyParentEmail(request)
+        print('Parent email verification result:', response.result)
+    except grpc.RpcError as e:
+        print('Error verifying parent email:', e.details())
+
+# Verify child email
+def verify_child_email(email):
+    request = VerifyChildEmailRequest(email=email)
+    try:
+        response = client.VerifyChildEmail(request)
+        print('Child email verification result:', response.result)
+    except grpc.RpcError as e:
+        print('Error verifying child email:', e.details())
