@@ -145,19 +145,19 @@ import { STwitterForKidsServiceClient } from './child_twitter_grpc_pb';
 // Create a gRPC client to connect to the server
 const client = new STwitterForKidsServiceClient('localhost:50051', grpc.credentials.createInsecure());
 
-// Create a tweet
-function createTweet(parent: string, tweetText: string) {
+// Create a post
+function createPost(parent: string, postText: string) {
     const request = new MCreateTweetRequest();
     request.setParent(parent);
-    const tweet = new MTweet();
-    tweet.setText(tweetText);
-    request.setTweet(tweet);
+    const post = new MPost();
+    post.setText(postText);
+    request.setPost(post);
 
-    client.createTweet(request, (error, response) => {
+    client.createPost(request, (error, response) => {
         if (!error) {
-            console.log(`Tweet created: ${response.getTweet()?.getName()}`);
+            console.log(`Post created: ${response.getPost()?.getName()}`);
         } else {
-            console.error('Error creating tweet:', error.message);
+            console.error('Error creating post:', error.message);
         }
     });
 }
