@@ -155,17 +155,17 @@ channel = grpc.insecure_channel('localhost:50051')  # Replace with your server's
 # Create a stub for the TwitterForKidsService
 twitter_service = STwitterForKidsServiceStub(channel)
 
-# Create a tweet
-def create_tweet(parent, tweet_text):
-    tweet = MCreateTweetRequest(parent=parent, tweet=MTweet(text=tweet_text))
-    response = twitter_service.CreateTweet(tweet)
-    print(f"Tweet created: {response.tweet.name}")
+# Create a post
+def create_post(parent, post):
+    post = MCreatePostRequest(parent=parent, tweet=MPost(text=post_text))
+    response = post_service.CreateTweet(post)
+    #print(f"Post created: {response.post.name}")
 
-# Delete a tweet
-def delete_tweet(tweet_name):
-    tweet = MDeleteTweetRequest(name=tweet_name)
-    twitter_service.DeleteTweet(tweet)
-    print(f"Tweet deleted: {tweet_name}")
+# Delete a post
+def delete_tweet(post_name):
+    post = MDeletePostRequest(name=post_name)
+    socialnetwork_service.DeletePost(post)
+    print(f"Post deleted: {post_name}")
 
 # Like a tweet
 def like_tweet(tweet_name):
