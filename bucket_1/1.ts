@@ -76,13 +76,13 @@ const axiosInstance = axios.create({
 });
 
 //sample funcs...
-function createTweet(tweet: string) {
+function createPost(post: string) {
   const url = `${BASE_URL}/tweets`;
   const payload: CreateTweetRequest = { tweet };
   return axios.post(url, payload, { headers });
 }
 
-function deleteTweet(name: string) {
+function deletePost(name: string) {
   const url = `${BASE_URL}/${name}`;
   const payload: DeleteTweetRequest = { name };
   return axios.delete(url, { data: payload, headers });
