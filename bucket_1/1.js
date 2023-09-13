@@ -133,16 +133,16 @@ async function listAccounts(page_size = 10, page_token = '', filter = '') {
   return response;
 }
 
-async function createTweet(tweet) {
-  const url = `${BASE_URL}/tweets`;
-  const payload = new CreateTweetRequest({ tweet });
+async function createPost(post) {
+  const url = `${BASE_URL}/posts`;
+  const payload = new CreatePostRequest({ post });
   const response = await axios.post(url, payload, { headers });
   return response;
 }
 
-async function deleteTweet(name) {
+async function deletePost(name) {
   const url = `${BASE_URL}/${name}`;
-  const payload = new DeleteTweetRequest({ name });
+  const payload = new DeletePostRequest({ name });
   const response = await axios.delete(url, { data: payload, headers });
   return response;
 }
