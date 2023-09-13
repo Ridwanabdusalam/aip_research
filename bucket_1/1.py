@@ -99,15 +99,15 @@ def list_accounts(page_size=10, page_token="", filter=""):
     response = requests.get(url, params=MessageToDict(payload), headers=headers)
     return response
 
-def create_tweet(tweet):
-    url = f"{BASE_URL}/tweets"
-    payload = CreateTweetRequest(tweet=tweet)
+def create_post(post):
+    url = f"{BASE_URL}/posts"
+    payload = CreatePostRequest(post=post)
     response = requests.post(url, json=MessageToDict(payload), headers=headers)
     return response
 
-def delete_tweet(name):
+def delete_post(name):
     url = f"{BASE_URL}/{name}"
-    payload = DeleteTweetRequest(name=name)
+    payload = DeletePostRequest(name=name)
     response = requests.delete(url, json=MessageToDict(payload), headers=headers)
     return response
 
