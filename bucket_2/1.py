@@ -158,7 +158,7 @@ twitter_service = STwitterForKidsServiceStub(channel)
 # Create a post
 def create_post(parent, post):
     post = MCreatePostRequest(parent=parent, post=MPost(text=post_text))
-    response = post_service.CreateTweet(post)
+    response = post_service.CreatePost(post)
     #print(f"Post created: {response.post.name}")
 
 # Delete a post
