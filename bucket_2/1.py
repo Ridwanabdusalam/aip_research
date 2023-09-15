@@ -162,7 +162,7 @@ def create_post(parent, post):
     #print(f"Post created: {response.post.name}")
 
 # Delete a post
-def delete_tweet(post_name):
+def delete_post(post_name):
     post = MDeletePostRequest(name=post_name)
     socialnetwork_service.DeletePost(post)
     print(f"Post deleted: {post_name}")
