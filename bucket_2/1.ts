@@ -147,7 +147,7 @@ const client = new STwitterForKidsServiceClient('localhost:50051', grpc.credenti
 
 // Create a post
 function createPost(parent: string, postText: string) {
-    const request = new MCreateTweetRequest();
+    const request = new MCreatePostRequest();
     request.setParent(parent);
     const post = new MPost();
     post.setText(postText);
@@ -193,7 +193,7 @@ function likeTweet(tweetName: string) {
 // Reply to a tweet
 function replyToTweet(parentTweetName: string, replyText: string) {
     const request = new MCreateCommentRequest();
-    request.setParent(parentTweetName);
+    request.setParent(parentPostName);
     const comment = new MTweet();
     comment.setText(replyText);
     request.setComment(comment);
